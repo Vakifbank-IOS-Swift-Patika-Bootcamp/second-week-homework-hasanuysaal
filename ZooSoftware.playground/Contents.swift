@@ -211,7 +211,7 @@ class Camel: Animal {
 /// Keeper
 
 class Keeper {
-
+    
     let id = UUID()
     var name: String
     var keepingAnimals : [Animal] = []
@@ -242,15 +242,6 @@ class Keeper {
         
         return newSalary
     }
-    /*
-    mutating func setKeepingAnimals(animals: [Animal]){
-        for animal in animals {
-            if animal.keeper.id == self.id {
-                self.keepingAnimals.append(animal)
-            }
-        }
-    }
-     */
     
 }
 
