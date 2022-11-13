@@ -15,7 +15,7 @@ protocol Animal {
     var waterConsumption: Double {get set}
     var drinkedWater: Bool {get set}
     var keepingDifficuality: keepingDifficuality {get set}
-    var keeper: Keeper {get set}
+    var keeper: Keeper? {get set}
     var zoo: Zoo {get set}
     func sound()
     mutating func drinkWater()
@@ -38,6 +38,14 @@ class Zoo {
         self.budget = budget
     }
     
+    func setKeepingAnimals(animals: [Animal], keeper: Keeper ){
+        for animal in animals {
+            var theAnimal = animal
+            keeper.keepingAnimals.append(animal)
+            theAnimal.keeper = keeper
+        }
+        
+    }
     
     func addIncome(income: Double){
         self.budget = self.budget + income
@@ -84,14 +92,14 @@ class Cat: Animal {
     var waterConsumption: Double
     var drinkedWater = false
     var keepingDifficuality: keepingDifficuality
-    var keeper: Keeper
+    var keeper: Keeper?
     var zoo: Zoo
     
-    init(name: String, breed: String? = nil, waterConsumption: Double, keepingDifficuality: keepingDifficuality, keeper: Keeper, zoo: Zoo){
+    init(name: String, breed: String? = nil, waterConsumption: Double, keepingDifficuality: keepingDifficuality, zoo: Zoo){
         self.name = name
         self.waterConsumption = waterConsumption
         self.keepingDifficuality = keepingDifficuality
-        self.keeper = keeper
+        self.breed = breed
         self.zoo = zoo
     }
     
@@ -120,15 +128,13 @@ class Dog: Animal {
     var waterConsumption: Double
     var drinkedWater = false
     var keepingDifficuality: keepingDifficuality
-    var keeper: Keeper
+    var keeper: Keeper?
     var zoo: Zoo
     
-    init(name: String, breed:String? = nil, waterConsumption: Double, keepingDifficuality: keepingDifficuality, keeper: Keeper, zoo: Zoo){
+    init(name: String, breed: String? = nil, waterConsumption: Double, keepingDifficuality: keepingDifficuality, zoo: Zoo){
         self.name = name
-        self.breed = breed
         self.waterConsumption = waterConsumption
         self.keepingDifficuality = keepingDifficuality
-        self.keeper = keeper
         self.zoo = zoo
     }
     
@@ -150,15 +156,13 @@ class Cow: Animal {
     var waterConsumption: Double
     var drinkedWater = false
     var keepingDifficuality: keepingDifficuality
-    var keeper: Keeper
+    var keeper: Keeper?
     var zoo: Zoo
     
-    init(name: String, breed:String? = nil, waterConsumption: Double, keepingDifficuality: keepingDifficuality, keeper: Keeper, zoo: Zoo){
+    init(name: String, breed: String? = nil, waterConsumption: Double, keepingDifficuality: keepingDifficuality, zoo: Zoo){
         self.name = name
-        self.breed = breed
         self.waterConsumption = waterConsumption
         self.keepingDifficuality = keepingDifficuality
-        self.keeper = keeper
         self.zoo = zoo
     }
     
@@ -181,14 +185,13 @@ class Camel: Animal {
     var waterConsumption: Double
     var drinkedWater = false
     var keepingDifficuality: keepingDifficuality
-    var keeper: Keeper
+    var keeper: Keeper?
     var zoo: Zoo
     
-    init(name: String, breed: String? = nil, waterConsumption: Double, keepingDifficuality: keepingDifficuality, keeper: Keeper, zoo: Zoo){
+    init(name: String, breed: String? = nil, waterConsumption: Double, keepingDifficuality: keepingDifficuality, zoo: Zoo){
         self.name = name
         self.waterConsumption = waterConsumption
         self.keepingDifficuality = keepingDifficuality
-        self.keeper = keeper
         self.zoo = zoo
     }
     
@@ -207,11 +210,15 @@ class Camel: Animal {
 
 /// Keeper
 
-struct Keeper {
+class Keeper {
 
     let id = UUID()
     var name: String
     var keepingAnimals : [Animal] = []
+    
+    init(name: String) {
+        self.name = name
+    }
     
     // Bakıcının 5250 ₺ maaşına bonus olarak baktığı hayvanların her biri için +500 ₺ eklenir.
     // Sonrasında hesaplanan maaş, baktığı hayvanların zorluk katsayılarının toplamı ile çarpılarak tekrar maaşa eklenir.
@@ -235,7 +242,7 @@ struct Keeper {
         
         return newSalary
     }
-    
+    /*
     mutating func setKeepingAnimals(animals: [Animal]){
         for animal in animals {
             if animal.keeper.id == self.id {
@@ -243,6 +250,7 @@ struct Keeper {
             }
         }
     }
+     */
     
 }
 
@@ -255,36 +263,37 @@ var keeper1 = Keeper(name: "Hasan")
 var keeper2 = Keeper(name: "Ali")
 
 // Hayvanlar oluşturuldu.
-var cat1 = Cat(name: "Zeytin", breed: "Tekir", waterConsumption: 30,keepingDifficuality: .easy, keeper: keeper1, zoo: zoo) as Animal
-var cat2 = Cat(name: "Garfield", waterConsumption: 50,keepingDifficuality: .easy, keeper: keeper2, zoo: zoo) as Animal
-var cat3 = cat2
+var cat1 = Cat(name: "Zeytin", breed: "Tekir", waterConsumption: 60,keepingDifficuality: .easy, zoo: zoo)
+var cat2 = Cat(name: "Garfield", waterConsumption: 50,keepingDifficuality: .easy, zoo: zoo)
+var cat3 = Cat(name: "Şerafettin", waterConsumption: 70,keepingDifficuality: .easy, zoo: zoo)
 
-var dog1 = Dog(name: "Paşa", waterConsumption: 70, keepingDifficuality: .easy, keeper: keeper2, zoo: zoo) as Animal
+var dog1 = Dog(name: "Paşa", waterConsumption: 70, keepingDifficuality: .easy, zoo: zoo)
 
-var cow1 = Cow(name: "Sarıkız", waterConsumption: 150,keepingDifficuality: .normal, keeper: keeper1, zoo: zoo) as Animal
+var cow1 = Cow(name: "Sarıkız", waterConsumption: 150,keepingDifficuality: .normal, zoo: zoo)
 
-var animals = [cat1, cat2, cat3, dog1, cow1]
+var animals = [cat1, cat2, cat3, dog1, cow1] as [Animal]
 var keepers = [keeper1, keeper2]
 
 // Hayvanat bahçesinin bakıcılar ve hayvanlar propertyleri setlendi.
 zoo.keepers = keepers
 zoo.animals = animals
 
-// Bakıcılara bakacakları hayvanlar verildi
-keeper1.setKeepingAnimals(animals: animals)
-keeper1.keepingAnimals
 
-keeper2.setKeepingAnimals(animals: animals)
-keeper2.keepingAnimals
+// Bakıcılara bakacakları hayvanlar verildi
+zoo.setKeepingAnimals(animals: [cat1, dog1], keeper: keeper1)
+zoo.setKeepingAnimals(animals: [cat2, cat3], keeper: keeper2)
 
 
 // Yeni bakıcı ve hayvanlar eklendi.
 var keeper3 = Keeper(name: "Veli")
-var camel1 = Camel(name: "Camel", waterConsumption: 1000,keepingDifficuality: .hard, keeper: keeper3, zoo: zoo)
+var camel1 = Camel(name: "Camel", waterConsumption: 1000,keepingDifficuality: .hard, zoo: zoo)
+keepers.append(keeper3)
+animals.append(camel1)
+
 zoo.keepers.append(keeper3)
 zoo.animals.append(camel1)
 
-keeper3.setKeepingAnimals(animals: [camel1])
+zoo.setKeepingAnimals(animals: [camel1], keeper: keeper3)
 
 //--Methodların ve Propertylerin kullanılması ve test edilmesi--
 
@@ -296,8 +305,6 @@ keeper3.keepingAnimals
 zoo.animals
 
 // Hayvanların su ihtiyacı giderildi ve hayvanat bahçesinin günlük kapasitesinden düşüldü.
-animals.append(camel1)
-
 zoo.dailyWaterCapacity
 cat1.drinkedWater
 zoo.drinkAllAnimals()
@@ -306,7 +313,6 @@ zoo.dailyWaterCapacity
 
 
 // Hayvanat bahçesinin su kapasitesi artırıldı.
-
 zoo.incraiseWaterCapacity(with: 500.0)
 
 zoo.dailyWaterCapacity
@@ -316,8 +322,6 @@ camel1.drinkedWater
 zoo.dailyWaterCapacity
 
 // Bakıcı maaşları ödendi ve hayvanat bahçesi bütçesinden düşüldü.
-keepers.append(keeper3)
-
 zoo.budget
 for keeper in keepers {
     zoo.paySalary(keeper: keeper)
@@ -340,9 +344,10 @@ keeper1.keepingAnimals
 cat1.sound()
 cat3.sound()
 
+// Hayvanat bahçesi, hayvanlar ve bakıcıların tanıtılması
 print("\(zoo.name)'nde \(zoo.animals.count) tane hayvan ve \(zoo.keepers.count) tane bakıcı bulunmaktadır.")
 print("\(zoo.name)'nin günlük su kapasitesi \(zoo.dailyWaterCapacity)'dir ve bütçesi ise \(zoo.budget)₺ dir.")
 
 print("Bakıcılardan \(keeper1.name) \(keeper1.keepingAnimals.count) tane hayvana bakmaktadır.")
 
-print("\(cat2.name), \(cat3.name) ve \(dog1.name) 'in bakıcısı \(cat2.keeper.name) 'dir")
+print("\(cat1.name) ve \(dog1.name) 'in bakıcısı \(cat1.keeper?.name ?? "") 'dir")
