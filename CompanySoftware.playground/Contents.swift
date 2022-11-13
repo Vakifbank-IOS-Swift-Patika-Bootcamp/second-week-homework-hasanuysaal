@@ -117,39 +117,49 @@ class SoftwareCompany: Company {
         
     }
     
-    func calculateSalary(developer: SoftwareDeveloper) -> Double {
+    func calculateSalary(developers: [SoftwareDeveloper]) {
         
-        var salary = 0.0
-        
-        switch developer.label {
-        case .intern:
-            salary = 5000
-            salary = salary + salary * calculateCoefficient(developer: developer)
-            salary = additionalSalary(developer: developer, salary: salary)
-        case .jr:
-            salary = 6000
-            salary = salary + salary * calculateCoefficient(developer: developer)
-            salary = additionalSalary(developer: developer, salary: salary)
-        case .mid:
-            salary = 7000
-            salary = salary + salary * calculateCoefficient(developer: developer)
-            salary = additionalSalary(developer: developer, salary: salary)
-        case .sr:
-            salary = 8000
-            salary = salary + salary * calculateCoefficient(developer: developer)
-            salary = additionalSalary(developer: developer, salary: salary)
-        case .lead:
-            salary = 9000
-            salary = salary + salary * calculateCoefficient(developer: developer)
-            salary = additionalSalary(developer: developer, salary: salary)
-        case .head:
-            salary = 10000
-            salary = salary + salary * calculateCoefficient(developer: developer)
-            salary = additionalSalary(developer: developer, salary: salary)
+        for developer in developers {
+            var salary = 0.0
+            
+            switch developer.label {
+            case .intern:
+                salary = 5000
+                salary = salary + salary * calculateCoefficient(developer: developer)
+                salary = additionalSalary(developer: developer, salary: salary)
+                developer.salary = salary
+            case .jr:
+                salary = 6000
+                salary = salary + salary * calculateCoefficient(developer: developer)
+                salary = additionalSalary(developer: developer, salary: salary)
+                developer.salary = salary
+            case .mid:
+                salary = 7000
+                salary = salary + salary * calculateCoefficient(developer: developer)
+                salary = additionalSalary(developer: developer, salary: salary)
+                developer.salary = salary
+            case .sr:
+                salary = 8000
+                salary = salary + salary * calculateCoefficient(developer: developer)
+                salary = additionalSalary(developer: developer, salary: salary)
+                developer.salary = salary
+            case .lead:
+                salary = 9000
+                salary = salary + salary * calculateCoefficient(developer: developer)
+                salary = additionalSalary(developer: developer, salary: salary)
+                developer.salary = salary
+            case .head:
+                salary = 10000
+                salary = salary + salary * calculateCoefficient(developer: developer)
+                salary = additionalSalary(developer: developer, salary: salary)
+                developer.salary = salary
+            }
         }
         
-        return salary
+        
+       
     }
+    
 }
 
 
@@ -179,6 +189,9 @@ class SoftwareDeveloper: Employee {
 
 ///Instances
 
+//- Create Company
+var patika = SoftwareCompany(name: "Patika.dev", developers: [], budget: 1000000, foundationYear: 2015)
+
 //- Create employees
 var sd1 = SoftwareDeveloper(id: UUID(), name: "Hasan", age: 25, label: .jr, maritalStatus: .notMarried, numOfChilds: 0)
 var sd2 = SoftwareDeveloper(id: UUID(), name: "Ali", age: 27, label: .mid, maritalStatus: .married, numOfChilds: 1)
@@ -188,23 +201,14 @@ var sd5 = SoftwareDeveloper(id: UUID(), name: "Serkan", age: 45, label: .head, m
 var sd6 = SoftwareDeveloper(id: UUID(), name: "Ayşe", age: 30, label: .mid, maritalStatus: .notMarried, numOfChilds: 0)
 var sd7 = SoftwareDeveloper(id: UUID(), name: "Fatma", age: 20, label: .intern, maritalStatus: .notMarried, numOfChilds: 0)
 
-//- Create Company
-var patika = SoftwareCompany(name: "Patika.dev", developers: [], budget: 1000000, foundationYear: 2015)
+var softwareDevelopers = [sd1, sd2, sd3, sd4, sd5, sd6, sd7]
 
 ///Calculate and set the employees' salaries
-
-sd1.salary = patika.calculateSalary(developer: sd1)
-sd2.salary = patika.calculateSalary(developer: sd2)
-sd3.salary = patika.calculateSalary(developer: sd3)
-sd4.salary = patika.calculateSalary(developer: sd4)
-sd5.salary = patika.calculateSalary(developer: sd5)
-sd6.salary = patika.calculateSalary(developer: sd6)
-sd7.salary = patika.calculateSalary(developer: sd7)
+patika.calculateSalary(developers: softwareDevelopers)
 
 ///Getting and Setting properties and Calling methods
 
 //- Adding employees to Company
-var softwareDevelopers = [sd1, sd2, sd3, sd4, sd5, sd6, sd7]
 patika.developers = softwareDevelopers
 
 //- The budget before salary is payid
